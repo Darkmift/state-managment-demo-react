@@ -1,6 +1,6 @@
 const users = [
-  { name: 'John', email: 'Jhon@site.com', password: '12345' },
-  { name: 'Bob', email: 'Bob@site.com', password: '12345' },
+  { name: 'John', email: 'jhon@site.com', password: '12345' },
+  { name: 'Bob', email: 'bob@site.com', password: '12345' },
 ];
 
 const logUserIn = (email, password) =>
@@ -15,14 +15,26 @@ const logUserIn = (email, password) =>
 
     const returnUser = JSON.parse(JSON.stringify(user));
     delete returnUser.password;
-    return returnUser;
+    resolve(returnUser);
   });
 
-export const login = (email, password) => async (dispatch) => {
+const loginMockService = async ({ email, password }) => {
   try {
     const res = await logUserIn(email, password);
-    dispatch({ type: 'SET_USER', payload: res.data });
-  } catch (err) {
-    console.error(err);
+    return res;
+  } catch (error) {
+    console.log('🚀 ~ file: login.mock-service.js:28 ~ loginMockService ~ error', error);
+    return null;
   }
 };
+
+// const loginMockService = (email, password) => async (dispatch) => {
+//   try {
+//     const res = await logUserIn(email, password);
+//     dispatch({ type: 'SET_USER', payload: res.data });
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+
+export default loginMockService;

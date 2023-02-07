@@ -1,10 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import localStorageService from '../../utils/localStorage';
-import generateUUID from '../../utils/uuid';
-
-function todoFactory() {
-  return { id: generateUUID(), title: '', description: '', date: new Date() };
-}
+import React, { createContext, useEffect, useState } from 'react';
+import generateUUID from '../utils/uuid';
 
 const sampleTodos = [
   {
@@ -30,35 +25,42 @@ const sampleTodos = [
   },
 ];
 
-export const todoSlice = createSlice({
-  name: 'todos',
-  initialState: { todos: [...sampleTodos] },
-  reducers: {
-    createTodo: (state, action) => {
-      const newTodo = todoFactory();
-      const { title, description, date } = action.payload.todo;
-      state.todos.push({ ...newTodo, description, title, id, date });
-    },
-    editTodo: (state, action) => {
-      const { id, title, description, date } = action.payload.todo;
-      const todoIdx = state.todos.findIndex((todo) => todo.id === id);
-      if (todoIdx === -1) {
-        throw new Error(`Invalid id`);
-      }
-
-      state.todos[todoIdx] = { ...state.todos[todoIdx], description, title, date };
-    },
-    deleteTodo: (state, action) => {
-      const todoIdx = state.todos.findIndex((todo) => todo.id === action.payload.id);
-      if (todoIdx === -1) {
-        throw new Error(`Invalid id`);
-      }
-      state.todos.splice(todoIdx, 1);
-    },
-  },
+export const TodoContext = createContext({
+  todos: [],
+  addTodo: () => {},
+  updateTodo: () => {},
+  deleteTodo: () => {},
 });
 
-// Action creators are generated for each case reducer function
-export const { createTodo, editTodo, deleteTodo } = todoSlice.actions;
+export const TodoProvider = ({ children }) => {
+  const [todos, setTodos] = useState([]);
 
-export default todoSlice.reducer;
+  useEffect(() => {
+    setTodos(sampleTodos);
+  }, []);
+
+  const addTodo = (newTodo) => {
+    setTodos([...todos, newTodo]);
+  };
+
+  const updateTodo = (updatedTodo) => {
+    setTodos(todos.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo)));
+  };
+
+  const deleteTodo = ({ id }) => {
+    setTodos((todos) => todos.filter((todo) => todo.id !== id));
+  };
+
+  return (
+    <TodoContext.Provider
+      value={{
+        todos,
+        addTodo,
+        updateTodo,
+        deleteTodo,
+      }}
+    >
+      {children}
+    </TodoContext.Provider>
+  );
+};

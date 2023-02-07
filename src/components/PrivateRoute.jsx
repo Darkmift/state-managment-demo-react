@@ -1,9 +1,10 @@
-import React, { Children } from 'react';
-import { Route, Navigate, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import React, { useContext } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import { UserContext } from '../context/user.context';
 
 const PrivateRoute = ({ children }) => {
-  const user = useSelector((state) => state?.users);
+  const { user } = useContext(UserContext);
+
   console.log('🚀 ~ file: PrivateRoute.jsx:7 ~ PrivateRoute ~ name', user);
   let location = useLocation();
 

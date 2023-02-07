@@ -1,17 +1,15 @@
-import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState, useContext } from 'react';
 import formatDate from '../utils/formatDate';
-import { deleteTodo } from '../store/slices/todos.slice';
+
+import { TodoContext } from '../context/todos.context';
+
 const TodoList = () => {
   const [toggleReadMore, setToggleReadMore] = useState(false);
 
-  const todos = useSelector((state) => state.todos.todos);
-  console.log('🚀 ~ file: TodoList .jsx:6 ~ TodoList ~ todos', todos);
-  const dispatch = useDispatch();
-  // const todoSlice = state.actions.deleteTodo
+  const { todos, deleteTodo } = useContext(TodoContext);
 
   const handleDelete = (id) => {
-    dispatch(deleteTodo({ id }));
+    deleteTodo({ id });
   };
 
   return (

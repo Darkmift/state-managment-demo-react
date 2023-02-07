@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useContext, useState } from 'react';
+import { UserContext } from '../../context/user.context';
 import { useNavigate } from 'react-router-dom';
-import { fetchUser } from '../../store/slices/user.slice';
 
 import uuid from '../../utils/uuid';
 
@@ -9,8 +8,8 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const dispatch = useDispatch();
-  const { name: uName, email: uEmail } = useSelector((state) => state.users);
+  const { user, logUser } = useContext(UserContext);
+  const { name: uName, email: uEmail } = user;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,9 +21,7 @@ function LoginPage() {
     if (!email?.length || !password?.length) {
       throw new Error('Invalid Credentials');
     }
-    const res = await dispatch(fetchUser({ email, password }));
-    if (!res.payload.name.length) return;
-    navigate('/todos');
+    logUser({ email, password });
   };
 
   const uuid1 = uuid();

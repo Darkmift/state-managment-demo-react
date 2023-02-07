@@ -1,11 +1,11 @@
 import React, { createContext, useState, useEffect } from 'react';
 import loginMockService from './login.mock-service';
-import localStorageService from '../utils/localStorage';
+import localStorageService from '../utils/localStorageService';
 
 export const UserContext = createContext({
   name: '',
   email: '',
-  logUser: () => {},
+  logUser: ({ email, password }) => {},
 });
 
 const LOCAL_STORAGE_KEY = 'user';
@@ -33,5 +33,9 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  return <UserContext.Provider value={{ user, logUser }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ name: user.name, email: user.email, logUser }}>
+      {children}
+    </UserContext.Provider>
+  );
 };

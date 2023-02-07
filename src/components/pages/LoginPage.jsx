@@ -8,8 +8,7 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { user, logUser } = useContext(UserContext);
-  const { name: uName, email: uEmail } = user;
+  const { name: uName, email: uEmail, logUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {

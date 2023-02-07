@@ -27,9 +27,9 @@ const sampleTodos = [
 
 export const TodoContext = createContext({
   todos: [],
-  addTodo: () => {},
-  updateTodo: () => {},
-  deleteTodo: () => {},
+  addTodo: ({ title, description }) => {},
+  updateTodo: ({ id, title, description, date }) => {},
+  deleteTodo: ({ id }) => {},
 });
 
 export const TodoProvider = ({ children }) => {
@@ -38,9 +38,16 @@ export const TodoProvider = ({ children }) => {
   useEffect(() => {
     setTodos(sampleTodos);
   }, []);
+  useEffect(() => {
+    console.log('🚀 ~ file: todos.context.jsx:44 ~ TodoProvider ~ todos', todos);
+  }, [todos]);
 
-  const addTodo = (newTodo) => {
-    setTodos([...todos, newTodo]);
+  const addTodo = (todo) => {
+    const newTodo = { ...todo, id: generateUUID(), date: new Date() };
+    const newTodos = JSON.parse(JSON.stringify(todos));
+    newTodos.push(newTodo);
+    // debugger;
+    setTodos(newTodos);
   };
 
   const updateTodo = (updatedTodo) => {

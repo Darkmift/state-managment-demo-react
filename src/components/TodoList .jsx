@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import formatDate from '../utils/formatDate';
+import { useNavigate } from 'react-router-dom';
 
 import { TodoContext } from '../context/todos.context';
 
@@ -7,6 +8,7 @@ const TodoList = () => {
   const [toggleReadMore, setToggleReadMore] = useState(false);
 
   const { todos, deleteTodo } = useContext(TodoContext);
+  const navigate = useNavigate();
 
   const handleDelete = (id) => {
     deleteTodo({ id });
@@ -53,6 +55,7 @@ const TodoList = () => {
           >
             {formatDate(todo.date)}
             <button onClick={() => handleDelete(todo.id)}>Delete</button>
+            <button onClick={() => navigate('/edit-todo', { state: { todo } })}>Edit</button>
           </div>
         </li>
       ))}

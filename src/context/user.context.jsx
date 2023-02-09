@@ -1,17 +1,19 @@
 import React, { createContext, useState, useEffect } from 'react';
 import loginMockService from './login.mock-service';
 import localStorageService from '../utils/localStorageService';
+import router from '../router';
 
 export const UserContext = createContext({
   name: '',
   email: '',
   logUser: ({ email, password }) => {},
+  logOut: () => {},
 });
 
 const LOCAL_STORAGE_KEY = 'user';
-
+const initialState = { name: '', email: '' };
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState({ name: '', email: '' });
+  const [user, setUser] = useState(initialState);
 
   useEffect(() => {
     const userData = localStorageService.getData(LOCAL_STORAGE_KEY);
@@ -21,7 +23,7 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    localStorageService.setData(LOCAL_STORAGE_KEY, user);
+    localStorageService.setData(LOCAL_STORAGE_KEY, user?.name?.length ? user : null);
   }, [user]);
 
   const logUser = async (user) => {
@@ -33,8 +35,13 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const logOut = async () => {
+    
+    setUser(initialState);
+  };
+
   return (
-    <UserContext.Provider value={{ name: user.name, email: user.email, logUser }}>
+    <UserContext.Provider value={{ name: user.name, email: user.email, logUser, logOut }}>
       {children}
     </UserContext.Provider>
   );

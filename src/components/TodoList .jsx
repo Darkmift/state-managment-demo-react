@@ -3,11 +3,13 @@ import formatDate from '../utils/formatDate';
 import { useNavigate } from 'react-router-dom';
 
 import { TodoContext } from '../context/todos.context';
+import { UserContext } from '../context/user.context';
 
 const TodoList = () => {
   const [toggleReadMore, setToggleReadMore] = useState(false);
 
   const { todos, deleteTodo } = useContext(TodoContext);
+  const { logOut } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleDelete = (id) => {
@@ -15,51 +17,54 @@ const TodoList = () => {
   };
 
   return (
-    <ul>
-      {todos.map((todo) => (
-        <li
-          key={todo.id}
-          style={{
-            display: 'flex',
-            gap: '10px',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            backgroundColor: '#ae6d6d',
-            padding: '1vmin',
-            marginBottom: '10px',
-            borderRadius: '5px',
-            width: '25vw',
-          }}
-        >
-          <h3>{todo.title}</h3>
-          <h3>Description</h3>
-          <p style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-            "{todo.description.slice(0, toggleReadMore ? todo.description.length + 1 : 50)}"
-            <span
-              style={{ cursor: 'pointer', fontStyle: 'italic' }}
-              onClick={() => setToggleReadMore((s) => !s)}
-            >
-              read more
-            </span>
-          </p>
-
-          <div
+    <>
+      <ul>
+        {todos.map((todo) => (
+          <li
+            key={todo.id}
             style={{
-              borderTop: '2px solid #fff',
-              paddingTop: '10px',
               display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: '100%',
+              gap: '10px',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              backgroundColor: '#ae6d6d',
+              padding: '1vmin',
+              marginBottom: '10px',
+              borderRadius: '5px',
+              width: '25vw',
             }}
           >
-            {formatDate(todo.date)}
-            <button onClick={() => handleDelete(todo.id)}>Delete</button>
-            <button onClick={() => navigate('/edit-todo', { state: { todo } })}>Edit</button>
-          </div>
-        </li>
-      ))}
-    </ul>
+            <h3>{todo.title}</h3>
+            <h3>Description</h3>
+            <p style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+              "{todo.description.slice(0, toggleReadMore ? todo.description.length + 1 : 50)}"
+              <span
+                style={{ cursor: 'pointer', fontStyle: 'italic' }}
+                onClick={() => setToggleReadMore((s) => !s)}
+              >
+                read more
+              </span>
+            </p>
+
+            <div
+              style={{
+                borderTop: '2px solid #fff',
+                paddingTop: '10px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: '100%',
+              }}
+            >
+              {formatDate(todo.date)}
+              <button onClick={() => handleDelete(todo.id)}>Delete</button>
+              <button onClick={() => navigate('/edit-todo', { state: { todo } })}>Edit</button>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <button onClick={logOut}>Logout</button>
+    </>
   );
 };
 

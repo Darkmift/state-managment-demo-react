@@ -8,12 +8,12 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { name: uName, email: uEmail, logUser } = useContext(UserContext);
+  const { name: userName, logUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (uName.length) navigate('/todos');
-  }, [uName, navigate]);
+    if (userName.length) navigate('/todos');
+  }, [userName, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,7 +56,7 @@ function LoginPage() {
         </label>
         <button type="submit">Log In</button>
       </form>
-      {uName && <div>Hello: {uName}</div>}
+      {userName && <div>Hello: {userName}</div>}
     </div>
   );
 }

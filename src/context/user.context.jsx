@@ -17,13 +17,21 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const userData = localStorageService.getData(LOCAL_STORAGE_KEY);
+    //here make sure to validate user
     if (userData?.name?.length) {
       setUser(userData);
+      router.navigate('/todos');
     }
   }, []);
 
   useEffect(() => {
-    localStorageService.setData(LOCAL_STORAGE_KEY, user?.name?.length ? user : null);
+    const userIsSet = user?.name?.length;
+    if (userIsSet) {
+      localStorageService.setData(LOCAL_STORAGE_KEY, user);
+    } else {
+      localStorageService.setData(LOCAL_STORAGE_KEY, null);
+      router.navigate('/login');
+    }
   }, [user]);
 
   const logUser = async (user) => {
@@ -36,7 +44,6 @@ export const UserProvider = ({ children }) => {
   };
 
   const logOut = async () => {
-    
     setUser(initialState);
   };
 

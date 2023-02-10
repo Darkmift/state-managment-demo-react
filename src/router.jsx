@@ -32,17 +32,17 @@ const router = createBrowserRouter([
   {
     path: '/edit-todo',
     element: (
-      <PrivateRoute>
-        <EditTodoPage />
-      </PrivateRoute>
+      // <PrivateRoute>
+      <EditTodoPage />
+      // </PrivateRoute>
     ),
   },
   {
     path: '/add-todo',
     element: (
-      <PrivateRoute>
-        <AddTodoPage />
-      </PrivateRoute>
+      // <PrivateRoute>
+      <AddTodoPage />
+      // </PrivateRoute>
     ),
   },
 ]);
